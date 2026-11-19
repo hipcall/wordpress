@@ -1,3 +1,4 @@
 index.html
 *.zip
 build/
+Claude outputs/

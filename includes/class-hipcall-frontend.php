@@ -20,7 +20,7 @@ function hipcall_enqueue_scripts() {
 
 	// 1. Marketing Tracker (h.js) - Enqueued asynchronously in <head> ($ver = null so no ?ver= is appended).
 	if ( '' !== $tracker_id && hipcall_is_valid_uuid( $tracker_id ) ) {
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External Hipcall endpoint manages its own caching.
+		// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion,WordPress.WP.EnqueuedResourceParameters.NotInFooter -- External Hipcall endpoint manages its own caching; h.js must load in <head>.
 		wp_enqueue_script(
 			'hipcall-tracker',
 			esc_url( $base_url . '/track/v1/h.js' ),
@@ -31,6 +31,7 @@ function hipcall_enqueue_scripts() {
 				'strategy'  => 'async',
 			)
 		);
+		// phpcs:enable
 	}
 
 	// 2. LiveChat (Webchat Widget) - Enqueued asynchronously in footer.
@@ -81,7 +82,7 @@ function hipcall_enqueue_scripts() {
 	);
 
 	// Enqueue external Hipcall widget script ($ver = null so no ?ver= is appended).
-	// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External Hipcall endpoint manages its own caching.
+	// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External Hipcall endpoint manages its own caching.
 	wp_enqueue_script(
 		'hipcall-widget',
 		esc_url( $widget_url ),
@@ -92,6 +93,7 @@ function hipcall_enqueue_scripts() {
 			'strategy'  => 'async',
 		)
 	);
+	// phpcs:enable
 }
 add_action( 'wp_enqueue_scripts', 'hipcall_enqueue_scripts' );
 
