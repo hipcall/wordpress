@@ -9,66 +9,70 @@ Requires PHP: 7.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
-Hipcall canlı destek (Webchat) ve pazarlama izleyicisini (h.js) WordPress sitenize ekleyin, üyeleri HMAC-SHA256 ile doğrulayın.
+Embed the Hipcall LiveChat widget and Marketing Tracker (h.js) on WordPress with automatic HMAC-SHA256 user verification.
 
 == Description ==
 
-**Hipcall** resmi WordPress eklentisi, [Hipcall](https://www.hipcall.com.tr/) canlı destek (Webchat) widget'ını ve pazarlama izleyicisini (`h.js`) hiçbir tema veya kod dosyasına dokunmadan WordPress sitenize eklemenizi sağlar.
+**Hipcall** is the official WordPress plugin for [Hipcall](https://www.hipcall.com.tr/). It allows you to easily integrate the Hipcall LiveChat (Webchat) widget and Marketing Tracker (`h.js`) into your WordPress site without editing any theme files or writing code.
 
-= Öne Çıkan Özellikler / Key Features =
+= Key Features =
 
-* **Canlı Destek (Webchat Widget):** WordPress yönetim panelinden (**Ayarlar > Hipcall**) yalnızca `Widget ID` bilginizi girerek canlı destek balonunu hemen aktif edin.
-* **Doğrulanmış Kullanıcılar (Verified Users - HMAC-SHA256):** `Secret Key` girildiğinde, WordPress sitenize giriş yapmış üyelerin e-posta adresi sunucu tarafında (PHP `hash_hmac`) HMAC-SHA256 ile imzalanır ve Hipcall'a **Verified (Doğrulanmış)** olarak iletilir.
-* **Pazarlama İzleyicisi (Marketing Tracker - `h.js`):** `İzleyici Kimliği (Tracker ID)` girildiğinde, sayfa yüklemesini engellemeyen eşzamansız `h.js` pazarlama ve UTM/form izleme betiğini her sayfanın `<head>` bölümüne otomatik olarak ekler.
-* **Oturum Güvenliği (Session Isolation):** Kullanıcı WordPress'ten çıkış yaptığında veya hesap değiştirdiğinde tarayıcıdaki doğrulanmış oturum verisi otomatik olarak sıfırlanır.
+* **LiveChat (Webchat Widget):** Enable the Hipcall live chat bubble across your site by simply entering your `Widget ID` under **Settings > Hipcall**.
+* **Verified Users (HMAC-SHA256):** When a `Secret Key` is configured, logged-in WordPress users are automatically verified on the server side using PHP `hash_hmac('sha256', $email, $secret_key)` and identified as **Verified** in the Hipcall agent inbox.
+* **Marketing Tracker (`h.js`):** When a `Tracker ID` is configured, the plugin automatically adds the asynchronous `h.js` script to the `<head>` of every page to track campaign attribution (UTM parameters, ad clicks) and form submissions.
+* **Session Isolation:** Automatically clears verified visitor session data in `localStorage` when a user logs out of WordPress or switches accounts.
+
+= Türkçe Özet (Turkish Summary) =
+
+**Hipcall** resmi WordPress eklentisi, [Hipcall](https://www.hipcall.com.tr/) Canlı Destek (Webchat) balonunu ve Pazarlama İzleyicisini (`h.js`) hiçbir tema dosyasına dokunmadan WordPress sitenize eklemenizi sağlar. Giriş yapmış WordPress üyelerini sunucu tarafında **HMAC-SHA256** (`user_hash`) ile otomatik olarak doğrular (**Verified User**).
 
 == External Services ==
 
-Bu eklenti, canlı destek widget'ını ve pazarlama izleyicisini sitenizde çalıştırmak için Hipcall bulut servislerine bağlanır (This plugin connects to Hipcall cloud services to provide the live chat widget and marketing tracker):
+This plugin connects to Hipcall cloud services to provide the live chat widget and marketing tracker on your website:
 
-* **Service Provider / Servis Sağlayıcı:** [Hipcall](https://www.hipcall.com.tr/)
-* **Endpoints Used / Kullanılan Bağlantılar:**
-  * `https://use.hipcall.com.tr/widget/{WIDGET_ID}` (Loads the live chat widget script and initializes visitor session)
-  * `wss://use.hipcall.com.tr/socket` (Establishes real-time messaging WebSocket connection)
+* **Service Provider:** [Hipcall](https://www.hipcall.com.tr/)
+* **Endpoints Used:**
+  * `https://use.hipcall.com.tr/widget/{WIDGET_ID}` (Loads the live chat widget script and initializes the visitor session)
+  * `wss://use.hipcall.com.tr/socket` (Establishes the real-time messaging WebSocket connection)
   * `https://use.hipcall.com.tr/track/v1/h.js` (Loads the asynchronous marketing attribution and form tracking script when Tracker ID is configured)
-* **Data Sent / Gönderilen Veriler:** Current page URL (`page_url`), page title (`page_title`), referrer, UTM/campaign parameters, and—only when a Secret Key is configured and a WordPress user is logged in—the user's display name (`name`), email address (`email`), and the server-computed HMAC-SHA256 verification hash (`user_hash`).
-* **Terms & Privacy / Kullanım Koşulları ve Gizlilik Politikası:**
+* **Data Sent:** Current page URL (`page_url`), page title (`page_title`), referrer, UTM/campaign parameters, and—only when a Secret Key is configured and a WordPress user is logged in—the user's display name (`name`), email address (`email`), and the server-computed HMAC-SHA256 verification hash (`user_hash`).
+* **Terms of Use & Privacy Policy:**
   * [Hipcall Website](https://www.hipcall.com.tr/)
-  * [Hipcall Privacy Policy / Gizlilik Politikası](https://www.hipcall.com.tr/gizlilik-politikasi/)
-  * [Hipcall Terms of Use / Kullanım Koşulları](https://www.hipcall.com.tr/kullanim-kosullari/)
+  * [Hipcall Privacy Policy](https://www.hipcall.com.tr/gizlilik-politikasi/)
+  * [Hipcall Terms of Use](https://www.hipcall.com.tr/kullanim-kosullari/)
 
 == Installation ==
 
-1. Eklentiyi WordPress panelinizden **Eklentiler > Yeni Ekle** menüsünden aratarak veya `hipcall.zip` dosyasını yükleyerek kurun.
-2. Eklentiyi etkinleştirin.
-3. **Ayarlar > Hipcall** (`Settings > Hipcall`) sayfasına gidin.
-4. Hipcall panelinizden (`https://use.hipcall.com.tr/`) aldığınız **Widget ID**, isteğe bağlı **Secret Key** ve **İzleyici Kimliği (Tracker ID)** bilgilerini girip kaydedin.
+1. Install the plugin via **Plugins > Add New** in your WordPress dashboard by searching for **Hipcall** or uploading `hipcall.zip`.
+2. Activate the **Hipcall** plugin.
+3. Navigate to **Settings > Hipcall** (`Ayarlar > Hipcall`).
+4. Enter your **Widget ID**, optional **Secret Key**, and/or **Tracker ID** from your [Hipcall Dashboard](https://use.hipcall.com.tr/) and click **Save Changes**.
 
 == Frequently Asked Questions ==
 
-= Widget ID ve Secret Key bilgilerini nereden alabilirim? =
+= Where can I find my Widget ID and Secret Key? =
 
-[Hipcall Panelinize](https://use.hipcall.com.tr/) giriş yaptıktan sonra **Ayarlar > Gelen Kutuları (Inboxes) > Webchat** bölümünden Widget ID ve kimlik doğrulama gizli anahtarınızı (`whsec_...`) alabilirsiniz.
+Log in to your [Hipcall Dashboard](https://use.hipcall.com.tr/) and navigate to **Settings > Inboxes > Webchat** (`Ayarlar > Gelen Kutuları > Webchat`) to copy your Widget ID and identity verification Secret Key (`whsec_...`).
 
-= İzleyici Kimliği (Tracker ID - h.js) bilgisini nereden alabilirim? =
+= Where can I find my Tracker ID (h.js)? =
 
-[Hipcall Panelinize](https://use.hipcall.com.tr/portal/settings/marketing/tracking/) giriş yaptıktan sonra **Ayarlar > Pazarlama > İzleme** bölümünden İzleyici Kimliğinizi alabilirsiniz.
+In your [Hipcall Dashboard](https://use.hipcall.com.tr/portal/settings/marketing/tracking/), go to **Settings > Marketing > Tracking** (`Ayarlar > Pazarlama > İzleme`) to copy your Tracker ID.
 
-= Secret Key veya Tracker ID girmek zorunlu mu? =
+= Are both Widget ID and Tracker ID required? =
 
-Hayır, her iki bileşen de bağımsız olarak veya birlikte kullanılabilir. Yalnızca `Widget ID` girerek canlı desteği, yalnızca `Tracker ID` girerek pazarlama izleyicisini (`h.js`) veya tümünü birden aktif edebilirsiniz.
+No. Both features work independently or together. You can configure only the LiveChat widget, only the Marketing Tracker (`h.js`), or both at the same time.
 
 == Screenshots ==
 
-1. Hipcall WordPress yönetim paneli ayarlar sayfası (Ayarlar > Hipcall).
-2. Web sitesi ön yüzünde Hipcall Canlı Destek (Webchat) görünümü.
+1. Hipcall settings page in the WordPress admin dashboard (Settings > Hipcall).
+2. Hipcall LiveChat widget displayed on the website frontend.
 
 == Changelog ==
 
 = 1.0.0 =
-* İlk sürüm: Hipcall Webchat widget entegrasyonu, HMAC-SHA256 tabanlı kullanıcı kimlik doğrulaması (Verified User) ve Pazarlama İzleyicisi (`h.js`) desteği.
+* Initial release: Hipcall Webchat widget integration, HMAC-SHA256 logged-in user verification (Verified User), and Marketing Tracker (`h.js`) support.
 
 == Upgrade Notice ==
 
 = 1.0.0 =
-Hipcall resmi WordPress eklentisinin ilk kararlı sürümü.
+Initial stable release of the official Hipcall WordPress plugin.
