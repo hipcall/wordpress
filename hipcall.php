@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Hipcall
  * Plugin URI:        https://github.com/hipcall/wordpress
- * Description:       Hipcall iletişim araçlarını WordPress sitenize kolayca entegre eder ve giriş yapmış üyeler için HMAC-SHA256 tabanlı kimlik doğrulaması (Verified User) sağlar.
+ * Description:       Hipcall canlı destek (Webchat) widget'ını ve pazarlama izleyicisini (h.js) WordPress sitenize kolayca entegre eder; giriş yapmış üyeler için HMAC-SHA256 tabanlı kimlik doğrulaması (Verified User) sağlar.
  * Version:           1.0.0
  * Requires at least: 5.0
  * Tested up to:      7.1
@@ -33,9 +33,24 @@ function hipcall_sanitize_widget_id( $value ) {
 	$clean = sanitize_text_field( (string) $value );
 	if ( strpos( $clean, '/widget/' ) !== false ) {
 		$parts = explode( '/widget/', $clean );
-		$clean = trim( (string) end( $parts ), " \t\n\r\0\x0B/'" );
+		$clean = trim( (string) end( $parts ), " \t\n\r\0\x0B/\"'" );
 	}
 	return $clean;
+}
+
+/**
+ * Tracker ID (İzleyici Kimliği) değerini temizle.
+ * Kullanıcı yanlışlıkla tüm <script ... data-hipcall-id="..."> etiketini yapıştırırsa sadece ID'yi ayıklar.
+ *
+ * @param mixed $value Ham Tracker ID veya script etiketi.
+ * @return string Temizlenmiş Tracker ID.
+ */
+function hipcall_sanitize_tracker_id( $value ) {
+	$raw = (string) $value;
+	if ( preg_match( '/data-hipcall-id=["\']([^"\']+)["\']/i', $raw, $matches ) ) {
+		return sanitize_text_field( trim( $matches[1] ) );
+	}
+	return sanitize_text_field( trim( $raw, " \t\n\r\0\x0B/\"'" ) );
 }
 
 /**
@@ -58,6 +73,16 @@ function hipcall_register_settings() {
 		array(
 			'type'              => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '',
+		)
+	);
+
+	register_setting(
+		'hipcall_settings_group',
+		'hipcall_tracker_id',
+		array(
+			'type'              => 'string',
+			'sanitize_callback' => 'hipcall_sanitize_tracker_id',
 			'default'           => '',
 		)
 	);
@@ -101,19 +126,21 @@ function hipcall_settings_page_html() {
 
 	$widget_id  = (string) get_option( 'hipcall_widget_id', '' );
 	$secret_key = (string) get_option( 'hipcall_secret_key', '' );
+	$tracker_id = (string) get_option( 'hipcall_tracker_id', '' );
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-		<p><?php esc_html_e( 'Hipcall bileşenlerini sitenizde aktif etmek için aşağıdaki bilgileri doldurun.', 'hipcall' ); ?></p>
+		<p><?php esc_html_e( 'Hipcall Canlı Destek (Webchat) ve Pazarlama İzleyicisi (h.js) bileşenlerini sitenizde aktif etmek için aşağıdaki bilgileri doldurun.', 'hipcall' ); ?></p>
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'hipcall_settings_group' ); ?>
 
+			<h2 class="title"><?php esc_html_e( 'Canlı Destek (Webchat Widget)', 'hipcall' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<tbody>
 					<tr>
 						<th scope="row">
-							<label for="hipcall_widget_id"><?php esc_html_e( 'Widget ID', 'hipcall' ); ?> <span style="color: #d63638;">*</span></label>
+							<label for="hipcall_widget_id"><?php esc_html_e( 'Widget ID', 'hipcall' ); ?></label>
 						</th>
 						<td>
 							<input
@@ -123,10 +150,9 @@ function hipcall_settings_page_html() {
 								value="<?php echo esc_attr( $widget_id ); ?>"
 								class="regular-text"
 								placeholder="Örn: 8e32e0b8-fd33-450b-a5b0-b3359e1384e1"
-								required
 							/>
 							<p class="description">
-								<?php esc_html_e( 'Hipcall panelinizdeki widget kurulum kodunun sonunda yer alan benzersiz ID\'yi girin.', 'hipcall' ); ?><br />
+								<?php esc_html_e( 'Hipcall panelinizdeki (Ayarlar > Gelen Kutuları > Webchat) widget kurulum kodunun sonunda yer alan benzersiz ID\'yi girin.', 'hipcall' ); ?><br />
 								<code>https://use.hipcall.com.tr/widget/<strong>WIDGET_ID</strong></code>
 							</p>
 						</td>
@@ -154,6 +180,33 @@ function hipcall_settings_page_html() {
 				</tbody>
 			</table>
 
+			<hr />
+
+			<h2 class="title"><?php esc_html_e( 'Pazarlama İzleyicisi (Marketing Tracker - h.js)', 'hipcall' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tbody>
+					<tr>
+						<th scope="row">
+							<label for="hipcall_tracker_id"><?php esc_html_e( 'İzleyici Kimliği (Tracker ID)', 'hipcall' ); ?></label>
+						</th>
+						<td>
+							<input
+								name="hipcall_tracker_id"
+								type="text"
+								id="hipcall_tracker_id"
+								value="<?php echo esc_attr( $tracker_id ); ?>"
+								class="regular-text"
+								placeholder="Örn: e61f8fe3-3eea-44d0-bd1f-416c143c710c"
+							/>
+							<p class="description">
+								<?php esc_html_e( 'Hipcall panelinizdeki (Ayarlar > Pazarlama > İzleme) bölümünde yer alan İzleyici Kimliğini girin. Doldurulduğunda her sayfanın <head> bölümüne h.js izleyicisini otomatik ekler.', 'hipcall' ); ?><br />
+								<code>&lt;script async src="https://use.hipcall.com.tr/track/v1/h.js" data-hipcall-id="<strong>TRACKER_ID</strong>"&gt;&lt;/script&gt;</code>
+							</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
 			<?php submit_button( esc_html__( 'Değişiklikleri Kaydet', 'hipcall' ) ); ?>
 		</form>
 	</div>
@@ -161,12 +214,27 @@ function hipcall_settings_page_html() {
 }
 
 /**
- * 3. Frontend JavaScript Enjeksiyonu ve HMAC-SHA256 Kullanıcı Doğrulaması.
- * WordPress.org eklenti standartlarına uygun olarak wp_enqueue_script ve wp_add_inline_script kullanır.
+ * 3. Frontend JavaScript Enjeksiyonu (h.js Tracker <head> + Webchat Widget Footer & HMAC-SHA256).
  */
 function hipcall_enqueue_scripts() {
-	$widget_id = trim( (string) get_option( 'hipcall_widget_id', '' ) );
+	$tracker_id = trim( (string) get_option( 'hipcall_tracker_id', '' ) );
+	$widget_id  = trim( (string) get_option( 'hipcall_widget_id', '' ) );
 
+	// 3A. Pazarlama İzleyicisi (h.js) - <head> içine async olarak eklenir.
+	if ( ! empty( $tracker_id ) ) {
+		wp_enqueue_script(
+			'hipcall-tracker',
+			'https://use.hipcall.com.tr/track/v1/h.js',
+			array(),
+			HIPCALL_VERSION,
+			array(
+				'in_footer' => false,
+				'strategy'  => 'async',
+			)
+		);
+	}
+
+	// 3B. Canlı Destek (Webchat Widget) - Footer içine async olarak eklenir.
 	if ( empty( $widget_id ) ) {
 		return;
 	}
@@ -222,3 +290,21 @@ function hipcall_enqueue_scripts() {
 	wp_add_inline_script( 'hipcall-widget', $before_script, 'before' );
 }
 add_action( 'wp_enqueue_scripts', 'hipcall_enqueue_scripts' );
+
+/**
+ * Pazarlama izleyicisi (h.js) script etiketine data-hipcall-id özniteliğini ekle.
+ *
+ * @param string $tag    Oluşturulan <script> HTML etiketi.
+ * @param string $handle Script handle adı.
+ * @return string Güncellenmiş <script> etiketi.
+ */
+function hipcall_script_loader_tag( $tag, $handle ) {
+	if ( 'hipcall-tracker' === $handle ) {
+		$tracker_id = trim( (string) get_option( 'hipcall_tracker_id', '' ) );
+		if ( ! empty( $tracker_id ) && strpos( $tag, 'data-hipcall-id=' ) === false ) {
+			$tag = str_replace( ' src=', ' data-hipcall-id="' . esc_attr( $tracker_id ) . '" src=', $tag );
+		}
+	}
+	return $tag;
+}
+add_filter( 'script_loader_tag', 'hipcall_script_loader_tag', 10, 2 );

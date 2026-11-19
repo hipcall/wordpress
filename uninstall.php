@@ -11,3 +11,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_option( 'hipcall_widget_id' );
 delete_option( 'hipcall_secret_key' );
+delete_option( 'hipcall_tracker_id' );
