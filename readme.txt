@@ -41,13 +41,13 @@ This plugin connects to Hipcall cloud services to provide the live chat widget a
   * `hipcall_wp_identity_{WIDGET_ID}` (`localStorage` and `sessionStorage`): Stores only the HMAC-SHA256 `user_hash` of the currently logged-in WordPress user so the chat session can be cleared automatically on logout or account switch.
 * **Terms of Use & Privacy Policy:**
   * Global: [Hipcall Website](https://www.hipcall.com/) | [Privacy Policy](https://www.hipcall.com/privacy-policy/) | [Terms of Service](https://www.hipcall.com/terms-of-service/)
-  * Türkiye: [Hipcall Türkiye](https://www.hipcall.com.tr/) | [Gizlilik Politikası](https://www.hipcall.com.tr/gizlilik-politikasi/) | [Kullanım Koşulları](https://www.hipcall.com.tr/kullanim-kosullari/)
+  * Türkiye: [Hipcall Türkiye](https://www.hipcall.com.tr/) | [Privacy Policy](https://www.hipcall.com.tr/gizlilik-politikasi/) | [Terms of Service](https://www.hipcall.com.tr/kullanim-kosullari/)
 
 == Installation ==
 
 1. Install the plugin via **Plugins > Add New** in your WordPress dashboard by searching for **Hipcall** or uploading `hipcall.zip`.
 2. Activate the **Hipcall** plugin.
-3. Navigate to **Settings > Hipcall** (`Ayarlar > Hipcall`).
+3. Navigate to **Settings > Hipcall**.
 4. Select your **Region** (`Global - use.hipcall.com` or `Türkiye - use.hipcall.com.tr`).
 5. Paste your **Widget code / ID**, optional **Identity verification** secret, and/or **Tracker ID**, then click **Save Changes**.
 
@@ -55,11 +55,11 @@ This plugin connects to Hipcall cloud services to provide the live chat widget a
 
 = Where can I find my Widget code and Identity verification secret? =
 
-In your Hipcall portal ([use.hipcall.com](https://use.hipcall.com/) or [use.hipcall.com.tr](https://use.hipcall.com.tr/)), go to **Settings › Inboxes › (your inbox) › Widget settings** (`Ayarlar › Gelen kutuları › (kutu) › Widget ayarları`). Copy the widget code (or UUID) under **Widget code** (`Widget kodu`), and copy your HMAC secret (`whsec_...`) under **Identity verification** (`Kimlik doğrulama`).
+In your Hipcall portal ([use.hipcall.com](https://use.hipcall.com/) or [use.hipcall.com.tr](https://use.hipcall.com.tr/)), go to **Settings › Inboxes › (your inbox) › Widget settings**. Copy the widget code (or UUID) under **Widget code**, and copy your HMAC secret (`whsec_...`) under **Identity verification**.
 
 = Where can I find my Tracker ID (h.js)? =
 
-In your Hipcall portal, go to **Settings › Marketing › Tracking** (`Ayarlar › Pazarlama › İzleme`). Under **Install tracker** (`İzleyiciyi kur`), copy your **Tracker ID** (`İzleyici Kimliği`) or the script tag.
+In your Hipcall portal, go to **Settings › Marketing › Tracking**. Under **Install tracker**, copy your **Tracker ID** or the script tag.
 
 = Do I need to configure my page caching plugin? =
 
