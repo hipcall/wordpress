@@ -1,0 +1,12 @@
+.git
+.github
+.gitignore
+.gitattributes
+.distignore
+README.md
+README.tr.md
+index.html
+phpcs.xml.dist
+*.zip
+build
+Claude outputs

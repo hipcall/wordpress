@@ -1,0 +1,86 @@
+# Copyright (C) 2026 Hipcall
+# This file is distributed under the MIT license.
+msgid ""
+msgstr ""
+"Project-Id-Version: Hipcall 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/hipcall/wordpress/issues\n"
+"POT-Creation-Date: 2026-11-19 16:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: hipcall\n"
+
+msgid "Hipcall Settings"
+msgstr ""
+
+msgid "Hipcall"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Configure your Hipcall widget and tracker settings below."
+msgstr ""
+
+msgid "Region"
+msgstr ""
+
+msgid "Global (use.hipcall.com)"
+msgstr ""
+
+msgid "Türkiye (use.hipcall.com.tr)"
+msgstr ""
+
+msgid "Select the Hipcall server region where your account is hosted."
+msgstr ""
+
+msgid "Widget settings"
+msgstr ""
+
+msgid "Widget code / ID"
+msgstr ""
+
+msgid "e.g. 8e32e0b8-fd33-450b-a5b0-b3359e1384e1"
+msgstr ""
+
+msgid "Paste the widget ID or the full widget code from Settings › Inboxes › (inbox) › Widget settings."
+msgstr ""
+
+msgid "Identity verification"
+msgstr ""
+
+msgid "Saved — enter a new value to change"
+msgstr ""
+
+msgid "e.g. whsec_..."
+msgstr ""
+
+msgid "An identity verification secret is currently saved. Leave blank to keep the existing secret, or enter a new value to replace it."
+msgstr ""
+
+msgid "Remove saved identity verification secret"
+msgstr ""
+
+msgid "Optional: Copy the secret from Settings › Inboxes › (inbox) › Widget settings › Identity verification to authenticate logged-in WordPress users via HMAC-SHA256."
+msgstr ""
+
+msgid "Install tracker"
+msgstr ""
+
+msgid "Tracker ID"
+msgstr ""
+
+msgid "e.g. e61f8fe3-3eea-44d0-bd1f-416c143c710c"
+msgstr ""
+
+msgid "Optional: Paste the Tracker ID or script tag from Settings › Marketing › Tracking to add h.js to the <head> of every page."
+msgstr ""
+
+msgid "Save Changes"
+msgstr ""
+
+msgid "Invalid Widget ID. Please enter a valid UUID or paste the full widget code from Settings › Inboxes › (inbox) › Widget settings."
+msgstr ""
+
+msgid "Invalid Tracker ID. Please enter a valid UUID or paste the script tag from Settings › Marketing › Tracking."
+msgstr ""

@@ -2,23 +2,42 @@
 
 🌐 **Language / Dil:** **English** | [Türkçe](README.tr.md)
 
-Official WordPress plugin for [Hipcall](https://www.hipcall.com/). Easily embed the Hipcall LiveChat (Webchat) widget and Marketing Tracker (`h.js`) on your WordPress site, and automatically verify logged-in WordPress users using HMAC-SHA256 (`user_hash`).
+Official WordPress plugin for [Hipcall](https://www.hipcall.com/). Embed the Hipcall LiveChat (Webchat) widget and Marketing Tracker (`h.js`) on your WordPress site, and authenticate logged-in WordPress users using HMAC-SHA256 (`user_hash`).
+
+## Requirements
+
+- WordPress **6.3** or higher
+- PHP **7.4** or higher
 
 ## Features
 
 - **Multi-Region Support:** Supports both **Global** ([https://use.hipcall.com](https://use.hipcall.com)) and **Türkiye** ([https://use.hipcall.com.tr](https://use.hipcall.com.tr)) accounts.
-- **LiveChat (Webchat Widget):** Add your Hipcall **Widget ID** from **Settings > Hipcall** without editing theme files.
-- **Verified Users (HMAC-SHA256):** When a **Secret Key** is configured, logged-in WordPress users are automatically authenticated on the server side via `hash_hmac('sha256', $email, $secret_key)` and passed to `hc('user', { email, name, user_hash })`.
-- **Marketing Tracker (`h.js`):** When a **Tracker ID** is configured, automatically injects `<script async src="https://use.hipcall.com/track/v1/h.js" data-hipcall-id="..."></script>` into the `<head>` of every page for marketing attribution, UTM tracking, and form tracking.
-- **Session Isolation:** Automatically resets verified visitor session data in `localStorage` when a user logs out or switches accounts.
+- **Widget Settings:** Paste either the bare UUID or the full `<script>` widget code from **Settings › Inboxes › (inbox) › Widget settings**.
+- **Identity Verification (HMAC-SHA256):** Configure the secret from **Settings › Inboxes › (inbox) › Widget settings › Identity verification**. Logged-in WordPress users are verified on the server side via `hash_hmac('sha256', $email, $secret_key)`. The secret is never echoed back into page HTML.
+- **Install Tracker (`h.js`):** Paste the Tracker ID or `<script>` tag from **Settings › Marketing › Tracking** to load `h.js` asynchronously in `<head>`.
+- **Session Isolation:** Clears `hipcall_session_<widget_id>` from both `localStorage` and `sessionStorage` when a user logs out or switches accounts.
 
-## Installation
+## File Structure
 
-1. Download or clone this repository into `wp-content/plugins/hipcall` (or upload `hipcall.zip` via **Plugins > Add New > Upload Plugin**).
-2. Activate the **Hipcall** plugin in WordPress.
-3. Navigate to **Settings > Hipcall**.
-4. Select your **Region / Server** (`Global - use.hipcall.com` or `Türkiye - use.hipcall.com.tr`).
-5. Enter your **Widget ID**, optional **Secret Key**, and/or **Tracker ID** (from [https://use.hipcall.com](https://use.hipcall.com)), then click **Save Changes**.
+```text
+hipcall/
+├── hipcall.php                        # Plugin bootstrap, constants, and includes
+├── uninstall.php                      # Option cleanup on plugin deletion
+├── readme.txt                         # WordPress.org Plugin Directory readme
+├── includes/
+│   ├── helpers.php                    # Region URLs and UUID extraction/validation
+│   ├── class-hipcall-settings.php     # Admin settings API, sanitization, and UI
+│   └── class-hipcall-frontend.php     # Script enqueuing and HMAC-SHA256 calculation
+├── assets/
+│   └── js/hipcall-widget.js           # Session isolation and hc('user', ...) queue init
+└── languages/
+    ├── hipcall-tr_TR.po               # Turkish translation source
+    └── hipcall-tr_TR.mo               # Compiled Turkish translation binary
+```
+
+## Caching Note
+
+When Identity verification is enabled, logged-in user details (`name`, `email`, `user_hash`) are embedded in the page HTML. Ensure full-page caching is **disabled for logged-in users** in your caching plugin or CDN.
 
 ## License
 
