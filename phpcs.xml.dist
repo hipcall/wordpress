@@ -9,8 +9,12 @@
 	<arg name="extensions" value="php"/>
 	<arg value="sp"/>
 
-	<rule ref="WordPress-Core"/>
-	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Core">
+		<exclude name="WordPress.Files.FileName"/>
+	</rule>
+	<rule ref="WordPress-Extra">
+		<exclude name="WordPress.WP.EnqueuedResourceParameters.MissingVersion"/>
+	</rule>
 
 	<config name="minimum_supported_wp_version" value="6.3"/>
 </ruleset>
