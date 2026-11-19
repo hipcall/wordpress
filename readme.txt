@@ -1,14 +1,14 @@
 === Hipcall ===
 Contributors: hipcall
-Tags: hipcall, livechat, live chat, customer support, chat widget
+Tags: hipcall, livechat, customer-support, chat, communication
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 7.1
 Stable tag: 1.0.0
 Requires PHP: 7.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
-Hipcall iletişim ve canlı destek bileşenlerini WordPress sitenize kolayca entegre edin ve giriş yapmış üyeler için HMAC-SHA256 doğrulaması sağlayın.
+Hipcall canlı destek ve iletişim bileşenlerini WordPress sitenize ekleyin, üyeleri HMAC-SHA256 ile doğrulayın.
 
 == Description ==
 
@@ -22,17 +22,17 @@ Hipcall iletişim ve canlı destek bileşenlerini WordPress sitenize kolayca ent
 
 == External Services ==
 
-Bu eklenti, canlı destek ve müşteri iletişimi widget'ını sitenizde çalıştırmak için Hipcall bulut servislerine bağlanır:
+Bu eklenti, canlı destek ve müşteri iletişimi widget'ını sitenizde çalıştırmak için Hipcall bulut servislerine bağlanır (This plugin connects to Hipcall cloud services to provide the live chat and communication widget):
 
-* **Servis Sağlayıcı:** [Hipcall](https://www.hipcall.com.tr/)
-* **Kullanılan Bağlantılar:**
-  * `https://use.hipcall.com.tr/widget/{WIDGET_ID}` (Widget betiğinin ve oturumunun başlatılması)
-  * `wss://use.hipcall.com.tr/socket` (Gerçek zamanlı mesajlaşma bağlantısı)
-* **Gönderilen Veriler:** Ziyaretçinin bulunduğu sayfa adresi (`page_url`), sayfa başlığı (`page_title`) ve eğer `Secret Key` tanımlanmışsa giriş yapmış WordPress kullanıcısının görünen adı (`name`), e-posta adresi (`email`) ve sunucuda üretilen HMAC-SHA256 doğrulama özeti (`user_hash`).
-* **Kullanım Koşulları ve Gizlilik Politikası:**
-  * [Hipcall Web Sitesi](https://www.hipcall.com.tr/)
-  * [Hipcall Gizlilik Politikası](https://www.hipcall.com.tr/gizlilik-politikasi/)
-  * [Hipcall Kullanım Koşulları](https://www.hipcall.com.tr/kullanim-kosullari/)
+* **Service Provider / Servis Sağlayıcı:** [Hipcall](https://www.hipcall.com.tr/)
+* **Endpoints Used / Kullanılan Bağlantılar:**
+  * `https://use.hipcall.com.tr/widget/{WIDGET_ID}` (Loads the widget script and initializes visitor session)
+  * `wss://use.hipcall.com.tr/socket` (Establishes real-time messaging WebSocket connection)
+* **Data Sent / Gönderilen Veriler:** Current page URL (`page_url`), page title (`page_title`), referrer, and—only when a Secret Key is configured and a WordPress user is logged in—the user's display name (`name`), email address (`email`), and the server-computed HMAC-SHA256 verification hash (`user_hash`).
+* **Terms & Privacy / Kullanım Koşulları ve Gizlilik Politikası:**
+  * [Hipcall Website](https://www.hipcall.com.tr/)
+  * [Hipcall Privacy Policy / Gizlilik Politikası](https://www.hipcall.com.tr/gizlilik-politikasi/)
+  * [Hipcall Terms of Use / Kullanım Koşulları](https://www.hipcall.com.tr/kullanim-kosullari/)
 
 == Installation ==
 

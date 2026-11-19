@@ -5,13 +5,15 @@
  * Description:       Hipcall iletişim araçlarını WordPress sitenize kolayca entegre eder ve giriş yapmış üyeler için HMAC-SHA256 tabanlı kimlik doğrulaması (Verified User) sağlar.
  * Version:           1.0.0
  * Requires at least: 5.0
- * Tested up to:      6.7
+ * Tested up to:      7.1
  * Requires PHP:      7.2
  * Author:            Hipcall
  * Author URI:        https://www.hipcall.com.tr/
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       hipcall
+ *
+ * @package Hipcall
  */
 
 // Doğrudan dosya erişimini engelle.
@@ -24,7 +26,7 @@ define( 'HIPCALL_VERSION', '1.0.0' );
 /**
  * Widget ID değerini temizle (tam URL yapıştırılmışsa yalnızca ID kısmını ayıkla).
  *
- * @param string $value Ham Widget ID veya URL değeri.
+ * @param mixed $value Ham Widget ID veya URL değeri.
  * @return string Temizlenmiş Widget ID.
  */
 function hipcall_sanitize_widget_id( $value ) {
@@ -90,44 +92,22 @@ function hipcall_action_links( $links ) {
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'hipcall_action_links' );
 
 /**
- * 2. Admin Ayarlar Sayfası Görünümü ve Kayıt İşlemi.
+ * 2. Admin Ayarlar Sayfası Görünümü (WordPress Settings API - options.php).
  */
 function hipcall_settings_page_html() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
-	if ( isset( $_POST['hipcall_submit'] ) ) {
-		check_admin_referer( 'hipcall_save_settings', 'hipcall_nonce' );
-
-		$raw_widget_id  = isset( $_POST['hipcall_widget_id'] ) ? wp_unslash( $_POST['hipcall_widget_id'] ) : '';
-		$raw_secret_key = isset( $_POST['hipcall_secret_key'] ) ? wp_unslash( $_POST['hipcall_secret_key'] ) : '';
-
-		$clean_widget_id  = hipcall_sanitize_widget_id( $raw_widget_id );
-		$clean_secret_key = sanitize_text_field( $raw_secret_key );
-
-		update_option( 'hipcall_widget_id', $clean_widget_id );
-		update_option( 'hipcall_secret_key', $clean_secret_key );
-
-		add_settings_error(
-			'hipcall_messages',
-			'hipcall_message',
-			esc_html__( 'Ayarlar başarıyla kaydedildi.', 'hipcall' ),
-			'updated'
-		);
-	}
-
-	$widget_id  = get_option( 'hipcall_widget_id', '' );
-	$secret_key = get_option( 'hipcall_secret_key', '' );
-
-	settings_errors( 'hipcall_messages' );
+	$widget_id  = (string) get_option( 'hipcall_widget_id', '' );
+	$secret_key = (string) get_option( 'hipcall_secret_key', '' );
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 		<p><?php esc_html_e( 'Hipcall bileşenlerini sitenizde aktif etmek için aşağıdaki bilgileri doldurun.', 'hipcall' ); ?></p>
 
-		<form method="post" action="">
-			<?php wp_nonce_field( 'hipcall_save_settings', 'hipcall_nonce' ); ?>
+		<form method="post" action="options.php">
+			<?php settings_fields( 'hipcall_settings_group' ); ?>
 
 			<table class="form-table" role="presentation">
 				<tbody>
@@ -174,7 +154,7 @@ function hipcall_settings_page_html() {
 				</tbody>
 			</table>
 
-			<?php submit_button( esc_html__( 'Değişiklikleri Kaydet', 'hipcall' ), 'primary', 'hipcall_submit' ); ?>
+			<?php submit_button( esc_html__( 'Değişiklikleri Kaydet', 'hipcall' ) ); ?>
 		</form>
 	</div>
 	<?php
@@ -209,12 +189,11 @@ function hipcall_enqueue_scripts() {
 		}
 	}
 
-	// Hipcall widget ana script'ini footer'da async olarak yükle ($ver = null ile ?ver= eklenmez).
 	wp_enqueue_script(
 		'hipcall-widget',
 		esc_url( $widget_url ),
 		array(),
-		null,
+		HIPCALL_VERSION,
 		array(
 			'in_footer' => true,
 			'strategy'  => 'async',
