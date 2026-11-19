@@ -1,0 +1,39 @@
+name: CI (PHP Lint & WPCS)
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  phpcs:
+    name: PHP Lint & WordPress Coding Standards
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.3']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer, phpcs
+          coverage: none
+
+      - name: Check PHP syntax
+        run: |
+          find . -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l
+
+      - name: Install WordPress Coding Standards
+        run: |
+          composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require --dev wp-coding-standards/wpcs:"^3.0"
+
+      - name: Run PHPCS
+        run: |
+          $(composer global config bin-dir --absolute)/phpcs --standard=phpcs.xml.dist

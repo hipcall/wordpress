@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Hipcall 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/hipcall/wordpress/issues\n"
+"POT-Creation-Date: 2026-11-19 15:00+0000\n"
+"PO-Revision-Date: 2026-11-19 15:00+0000\n"
+"Last-Translator: Hipcall <dev@hipcall.com>\n"
+"Language-Team: Turkish\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: hipcall\n"
+
+msgid "Hipcall Settings"
+msgstr "Hipcall Ayarları"
+
+msgid "Hipcall"
+msgstr "Hipcall"
+
+msgid "Settings"
+msgstr "Ayarlar"
+
+msgid "Configure your Hipcall widget and tracker settings below."
+msgstr "Hipcall widget ve izleyici ayarlarınızı aşağıdan yapılandırabilirsiniz."
+
+msgid "Region"
+msgstr "Bölge"
+
+msgid "Global (use.hipcall.com)"
+msgstr "Global (use.hipcall.com)"
+
+msgid "Türkiye (use.hipcall.com.tr)"
+msgstr "Türkiye (use.hipcall.com.tr)"
+
+msgid "Select the Hipcall server region where your account is hosted."
+msgstr "Hipcall hesabınızın barındırıldığı sunucu bölgesini seçin."
+
+msgid "Widget settings"
+msgstr "Widget ayarları"
+
+msgid "Widget code / ID"
+msgstr "Widget kodu / ID"
+
+msgid "e.g. 8e32e0b8-fd33-450b-a5b0-b3359e1384e1"
+msgstr "Örn: 8e32e0b8-fd33-450b-a5b0-b3359e1384e1"
+
+msgid "Paste the widget ID or the full widget code from Settings › Inboxes › (inbox) › Widget settings."
+msgstr "Ayarlar › Gelen kutuları › (kutu) › Widget ayarları bölümündeki Widget ID'yi veya tam widget kodunu yapıştırın."
+
+msgid "Identity verification"
+msgstr "Kimlik doğrulama"
+
+msgid "Saved — enter a new value to change"
+msgstr "Kayıtlı — değiştirmek için yeni değer girin"
+
+msgid "e.g. whsec_..."
+msgstr "Örn: whsec_..."
+
+msgid "An identity verification secret is currently saved. Leave blank to keep the existing secret, or enter a new value to replace it."
+msgstr "Kimlik doğrulama gizli anahtarı şu anda kayıtlı. Mevcut anahtarı korumak için boş bırakın veya değiştirmek için yeni bir değer girin."
+
+msgid "Remove saved identity verification secret"
+msgstr "Kayıtlı kimlik doğrulama gizli anahtarını sil"
+
+msgid "Optional: Copy the secret from Settings › Inboxes › (inbox) › Widget settings › Identity verification to authenticate logged-in WordPress users via HMAC-SHA256."
+msgstr "İsteğe bağlı: Giriş yapmış WordPress kullanıcılarını HMAC-SHA256 ile doğrulamak için Ayarlar › Gelen kutuları › (kutu) › Widget ayarları › Kimlik doğrulama bölümündeki gizli anahtarı girin."
+
+msgid "Install tracker"
+msgstr "İzleyiciyi kur"
+
+msgid "Tracker ID"
+msgstr "İzleyici Kimliği"
+
+msgid "e.g. e61f8fe3-3eea-44d0-bd1f-416c143c710c"
+msgstr "Örn: e61f8fe3-3eea-44d0-bd1f-416c143c710c"
+
+msgid "Optional: Paste the Tracker ID or script tag from Settings › Marketing › Tracking to add h.js to the <head> of every page."
+msgstr "İsteğe bağlı: Her sayfanın <head> bölümüne h.js eklemek için Ayarlar › Pazarlama › İzleme bölümündeki İzleyici Kimliğini veya script etiketini yapıştırın."
+
+msgid "Save Changes"
+msgstr "Değişiklikleri Kaydet"
+
+msgid "Invalid Widget ID. Please enter a valid UUID or paste the full widget code from Settings › Inboxes › (inbox) › Widget settings."
+msgstr "Geçersiz Widget ID. Lütfen geçerli bir UUID girin veya Ayarlar › Gelen kutuları › (kutu) › Widget ayarları bölümündeki tam widget kodunu yapıştırın."
+
+msgid "Invalid Tracker ID. Please enter a valid UUID or paste the script tag from Settings › Marketing › Tracking."
+msgstr "Geçersiz İzleyici Kimliği. Lütfen geçerli bir UUID girin veya Ayarlar › Pazarlama › İzleme bölümündeki script etiketini yapıştırın."

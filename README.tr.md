@@ -2,23 +2,24 @@
 
 🌐 **Dil / Language:** [English](README.md) | **Türkçe**
 
-[Hipcall](https://www.hipcall.com.tr/) resmi WordPress eklentisi. Hipcall Canlı Destek (Webchat) bileşenini ve Pazarlama İzleyicisini (`h.js`) WordPress sitenize kolayca eklemenizi ve giriş yapmış WordPress üyelerini HMAC-SHA256 (`user_hash`) ile otomatik olarak doğrulamanızı (**Verified User**) sağlar.
+[Hipcall](https://www.hipcall.com.tr/) resmi WordPress eklentisi. Hipcall Canlı Destek (Webchat) bileşenini ve Pazarlama İzleyicisini (`h.js`) WordPress sitenize kolayca eklemenizi ve giriş yapmış WordPress üyelerini HMAC-SHA256 (`user_hash`) ile otomatik olarak doğrulamanızı (**Kimlik doğrulama**) sağlar.
+
+## Gereksinimler
+
+- WordPress **6.3** veya üzeri
+- PHP **7.4** veya üzeri
 
 ## Özellikler
 
-- **Bölge / Sunucu Seçimi:** Hem **Türkiye** ([https://use.hipcall.com.tr](https://use.hipcall.com.tr)) hem de **Global** ([https://use.hipcall.com](https://use.hipcall.com)) Hipcall hesaplarıyla tam uyumlu çalışır.
-- **Canlı Destek (Webchat Widget):** Tema dosyalarına veya koda müdahale etmeden **Ayarlar > Hipcall** ekranından **Widget ID** bilginizi girerek hemen kullanmaya başlayın.
-- **Doğrulanmış Kullanıcılar (HMAC-SHA256):** **Secret Key (Gizli Anahtar)** girildiğinde, WordPress'e giriş yapmış üyelerin e-posta adresi sunucu tarafında (`hash_hmac('sha256', $email, $secret_key)`) şifrelenir ve `hc('user', { email, name, user_hash })` ile güvenli şekilde Hipcall'a iletilir.
-- **Pazarlama İzleyicisi (`h.js`):** **İzleyici Kimliği (Tracker ID)** girildiğinde, her sayfanın `<head>` bölümüne eşzamansız `<script async src="https://use.hipcall.com.tr/track/v1/h.js" data-hipcall-id="..."></script>` kodunu otomatik olarak ekler; UTM kampanya kaynaklarını, ziyaretçi yolculuğunu ve form gönderimlerini takip eder.
-- **Oturum Güvenliği:** Kullanıcı WordPress'ten çıkış yaptığında veya farklı bir hesaba geçtiğinde tarayıcıdaki doğrulanmış oturum verisi otomatik olarak sıfırlanır.
+- **Bölge Seçimi:** Hem **Türkiye** ([https://use.hipcall.com.tr](https://use.hipcall.com.tr)) hem de **Global** ([https://use.hipcall.com](https://use.hipcall.com)) Hipcall hesaplarıyla uyumlu çalışır.
+- **Widget Ayarları:** Hipcall panelindeki **Ayarlar › Gelen kutuları › (kutu) › Widget ayarları › Widget kodu** bölümünden ister sadece UUID'yi ister tüm `<script>` kodunu yapıştırabilirsiniz.
+- **Kimlik Doğrulama (HMAC-SHA256):** **Ayarlar › Gelen kutuları › (kutu) › Widget ayarları › Kimlik doğrulama** bölümündeki gizli anahtar girildiğinde, WordPress'e giriş yapmış üyelerin e-posta adresi sunucu tarafında (`hash_hmac('sha256', $email, $secret_key)`) imzalanır. Gizli anahtar kaydedildikten sonra HTML kaynak koduna geri basılmaz.
+- **İzleyiciyi Kur (`h.js`):** **Ayarlar › Pazarlama › İzleme › İzleyiciyi kur** bölümündeki **İzleyici Kimliği** (veya `<script>` etiketi) girildiğinde her sayfanın `<head>` bölümüne eşzamansız `h.js` izleyicisini ekler.
+- **Oturum İzolasyonu:** Kullanıcı WordPress'ten çıkış yaptığında veya aynı tarayıcıda farklı bir hesaba geçtiğinde `hipcall_session_<widget_id>` oturumu hem `localStorage` hem `sessionStorage` üzerinden tamamen temizlenir.
 
-## Kurulum
+## Önbellek (Cache) Notu
 
-1. Bu depoyu `wp-content/plugins/hipcall` klasörüne indirin (veya `hipcall.zip` dosyasını WordPress yönetim panelinden **Eklentiler > Yeni Ekle > Eklenti Yükle** menüsünden yükleyin).
-2. WordPress panelinden **Hipcall** eklentisini etkinleştirin.
-3. **Ayarlar > Hipcall** sayfasına gidin.
-4. **Bölge / Sunucu** olarak **Türkiye (`use.hipcall.com.tr`)** seçin.
-5. [Hipcall Panelinizden](https://use.hipcall.com.tr/) aldığınız **Widget ID**, (isteğe bağlı) **Secret Key** ve **İzleyici Kimliği (Tracker ID)** bilgilerini girip **Değişiklikleri Kaydet** butonuna tıklayın.
+Kimlik doğrulama aktifken giriş yapmış kullanıcının adı, e-postası ve `user_hash` bilgisi sayfa HTML'ine yazılır. Önbellek (cache) eklentinizde **giriş yapmış kullanıcılar için sayfa önbelleklemenin kapalı olduğundan** emin olun.
 
 ## Lisans
 
