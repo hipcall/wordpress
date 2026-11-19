@@ -8,7 +8,7 @@
  * Tested up to:      7.1
  * Requires PHP:      7.2
  * Author:            Hipcall
- * Author URI:        https://www.hipcall.com.tr/
+ * Author URI:        https://www.hipcall.com/
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       hipcall
@@ -40,6 +40,10 @@ function hipcall_gettext_tr( $translation, $text ) {
 		'Hipcall Settings'                                 => 'Hipcall Ayarları',
 		'Settings'                                         => 'Ayarlar',
 		'Configure your Hipcall LiveChat (Webchat) widget and Marketing Tracker (h.js) settings below.' => 'Hipcall Canlı Destek (Webchat) ve Pazarlama İzleyicisi (h.js) bileşenlerini sitenizde aktif etmek için aşağıdaki bilgileri doldurun.',
+		'Region / Server'                                  => 'Bölge / Sunucu (Region)',
+		'Global (use.hipcall.com)'                         => 'Global (use.hipcall.com)',
+		'Türkiye (use.hipcall.com.tr)'                     => 'Türkiye (use.hipcall.com.tr)',
+		'Select the Hipcall server region where your account is hosted (use.hipcall.com for Global, use.hipcall.com.tr for Türkiye).' => 'Hipcall hesabınızın bulunduğu sunucu bölgesini seçin (Türkiye için use.hipcall.com.tr, Global için use.hipcall.com).',
 		'LiveChat (Webchat Widget)'                        => 'Canlı Destek (Webchat Widget)',
 		'Widget ID'                                        => 'Widget ID',
 		'e.g. 8e32e0b8-fd33-450b-a5b0-b3359e1384e1'        => 'Örn: 8e32e0b8-fd33-450b-a5b0-b3359e1384e1',
@@ -59,6 +63,36 @@ function hipcall_gettext_tr( $translation, $text ) {
 add_filter( 'gettext_hipcall', 'hipcall_gettext_tr', 10, 2 );
 
 /**
+ * Get the default region based on the WordPress site locale ('tr' for tr_TR, 'global' otherwise).
+ *
+ * @return string 'tr' or 'global'.
+ */
+function hipcall_get_default_region() {
+	return ( strpos( determine_locale(), 'tr' ) === 0 ) ? 'tr' : 'global';
+}
+
+/**
+ * Get the active Hipcall base domain according to the selected region.
+ *
+ * @return string 'https://use.hipcall.com.tr' or 'https://use.hipcall.com'.
+ */
+function hipcall_get_base_url() {
+	$region = get_option( 'hipcall_region', hipcall_get_default_region() );
+	return ( 'tr' === $region ) ? 'https://use.hipcall.com.tr' : 'https://use.hipcall.com';
+}
+
+/**
+ * Sanitize region setting ('global' or 'tr').
+ *
+ * @param mixed $value Raw region value.
+ * @return string Sanitized region code ('global' or 'tr').
+ */
+function hipcall_sanitize_region( $value ) {
+	$clean = sanitize_text_field( (string) $value );
+	return in_array( $clean, array( 'global', 'tr' ), true ) ? $clean : hipcall_get_default_region();
+}
+
+/**
  * Sanitize Widget ID (extracts UUID if the user pasted the full widget URL).
  *
  * @param mixed $value Raw Widget ID or URL value.
@@ -66,6 +100,11 @@ add_filter( 'gettext_hipcall', 'hipcall_gettext_tr', 10, 2 );
  */
 function hipcall_sanitize_widget_id( $value ) {
 	$clean = sanitize_text_field( (string) $value );
+	if ( strpos( $clean, 'use.hipcall.com.tr' ) !== false ) {
+		update_option( 'hipcall_region', 'tr' );
+	} elseif ( strpos( $clean, 'use.hipcall.com' ) !== false ) {
+		update_option( 'hipcall_region', 'global' );
+	}
 	if ( strpos( $clean, '/widget/' ) !== false ) {
 		$parts = explode( '/widget/', $clean );
 		$clean = trim( (string) end( $parts ), " \t\n\r\0\x0B/\"'" );
@@ -81,6 +120,11 @@ function hipcall_sanitize_widget_id( $value ) {
  */
 function hipcall_sanitize_tracker_id( $value ) {
 	$raw = (string) $value;
+	if ( strpos( $raw, 'use.hipcall.com.tr' ) !== false ) {
+		update_option( 'hipcall_region', 'tr' );
+	} elseif ( strpos( $raw, 'use.hipcall.com' ) !== false ) {
+		update_option( 'hipcall_region', 'global' );
+	}
 	if ( preg_match( '/data-hipcall-id=["\']([^"\']+)["\']/i', $raw, $matches ) ) {
 		return sanitize_text_field( trim( $matches[1] ) );
 	}
@@ -91,6 +135,16 @@ function hipcall_sanitize_tracker_id( $value ) {
  * Register plugin settings using the WordPress Settings API.
  */
 function hipcall_register_settings() {
+	register_setting(
+		'hipcall_settings_group',
+		'hipcall_region',
+		array(
+			'type'              => 'string',
+			'sanitize_callback' => 'hipcall_sanitize_region',
+			'default'           => hipcall_get_default_region(),
+		)
+	);
+
 	register_setting(
 		'hipcall_settings_group',
 		'hipcall_widget_id',
@@ -158,9 +212,11 @@ function hipcall_settings_page_html() {
 		return;
 	}
 
+	$region     = (string) get_option( 'hipcall_region', hipcall_get_default_region() );
 	$widget_id  = (string) get_option( 'hipcall_widget_id', '' );
 	$secret_key = (string) get_option( 'hipcall_secret_key', '' );
 	$tracker_id = (string) get_option( 'hipcall_tracker_id', '' );
+	$base_url   = hipcall_get_base_url();
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
@@ -168,6 +224,31 @@ function hipcall_settings_page_html() {
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'hipcall_settings_group' ); ?>
+
+			<table class="form-table" role="presentation">
+				<tbody>
+					<tr>
+						<th scope="row">
+							<label for="hipcall_region"><?php esc_html_e( 'Region / Server', 'hipcall' ); ?></label>
+						</th>
+						<td>
+							<select name="hipcall_region" id="hipcall_region">
+								<option value="global" <?php selected( $region, 'global' ); ?>>
+									<?php esc_html_e( 'Global (use.hipcall.com)', 'hipcall' ); ?>
+								</option>
+								<option value="tr" <?php selected( $region, 'tr' ); ?>>
+									<?php esc_html_e( 'Türkiye (use.hipcall.com.tr)', 'hipcall' ); ?>
+								</option>
+							</select>
+							<p class="description">
+								<?php esc_html_e( 'Select the Hipcall server region where your account is hosted (use.hipcall.com for Global, use.hipcall.com.tr for Türkiye).', 'hipcall' ); ?>
+							</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<hr />
 
 			<h2 class="title"><?php esc_html_e( 'LiveChat (Webchat Widget)', 'hipcall' ); ?></h2>
 			<table class="form-table" role="presentation">
@@ -187,7 +268,7 @@ function hipcall_settings_page_html() {
 							/>
 							<p class="description">
 								<?php esc_html_e( 'Enter the unique Widget ID found at the end of your widget installation URL in the Hipcall dashboard (Settings > Inboxes > Webchat).', 'hipcall' ); ?><br />
-								<code>https://use.hipcall.com.tr/widget/<strong>WIDGET_ID</strong></code>
+								<code><?php echo esc_html( $base_url ); ?>/widget/<strong>WIDGET_ID</strong></code>
 							</p>
 						</td>
 					</tr>
@@ -234,7 +315,7 @@ function hipcall_settings_page_html() {
 							/>
 							<p class="description">
 								<?php esc_html_e( 'Optional: Enter the Tracker ID from your Hipcall dashboard (Settings > Marketing > Tracking) to automatically inject h.js into the <head> of every page.', 'hipcall' ); ?><br />
-								<code>&lt;script async src="https://use.hipcall.com.tr/track/v1/h.js" data-hipcall-id="<strong>TRACKER_ID</strong>"&gt;&lt;/script&gt;</code>
+								<code>&lt;script async src="<?php echo esc_html( $base_url ); ?>/track/v1/h.js" data-hipcall-id="<strong>TRACKER_ID</strong>"&gt;&lt;/script&gt;</code>
 							</p>
 						</td>
 					</tr>
@@ -251,6 +332,7 @@ function hipcall_settings_page_html() {
  * 3. Enqueue frontend scripts (h.js Tracker in <head> + Webchat Widget in Footer & HMAC-SHA256).
  */
 function hipcall_enqueue_scripts() {
+	$base_url   = hipcall_get_base_url();
 	$tracker_id = trim( (string) get_option( 'hipcall_tracker_id', '' ) );
 	$widget_id  = trim( (string) get_option( 'hipcall_widget_id', '' ) );
 
@@ -258,7 +340,7 @@ function hipcall_enqueue_scripts() {
 	if ( ! empty( $tracker_id ) ) {
 		wp_enqueue_script(
 			'hipcall-tracker',
-			'https://use.hipcall.com.tr/track/v1/h.js',
+			esc_url( $base_url . '/track/v1/h.js' ),
 			array(),
 			HIPCALL_VERSION,
 			array(
@@ -274,7 +356,7 @@ function hipcall_enqueue_scripts() {
 	}
 
 	$secret_key  = trim( (string) get_option( 'hipcall_secret_key', '' ) );
-	$widget_url  = 'https://use.hipcall.com.tr/widget/' . rawurlencode( $widget_id );
+	$widget_url  = $base_url . '/widget/' . rawurlencode( $widget_id );
 	$is_verified = false;
 	$user_email  = '';
 	$user_name   = '';
