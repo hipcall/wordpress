@@ -1,6 +1,8 @@
 # Hipcall WordPress Plugin
 
-Official WordPress plugin for [Hipcall](https://www.hipcall.com/). Easily embed Hipcall communication widgets on your WordPress site and automatically verify logged-in WordPress users using HMAC-SHA256 (`user_hash`).
+🌐 **Language / Dil:** **English** | [Türkçe](README.tr.md)
+
+Official WordPress plugin for [Hipcall](https://www.hipcall.com.tr/). Easily embed Hipcall communication widgets on your WordPress site and automatically verify logged-in WordPress users using HMAC-SHA256 (`user_hash`).
 
 ## Features
 
@@ -13,7 +15,7 @@ Official WordPress plugin for [Hipcall](https://www.hipcall.com/). Easily embed 
 1. Download or clone this repository into `wp-content/plugins/hipcall` (or upload `hipcall.zip` via **Plugins > Add New > Upload Plugin**).
 2. Activate the **Hipcall** plugin in WordPress.
 3. Navigate to **Settings > Hipcall** (`Ayarlar > Hipcall`).
-4. Enter your **Widget ID** and (optionally) your **Secret Key**, then click **Save Changes**.
+4. Enter your **Widget ID** (from [https://use.hipcall.com.tr](https://use.hipcall.com.tr)) and (optionally) your **Secret Key**, then click **Save Changes**.
 
 ## License
 
