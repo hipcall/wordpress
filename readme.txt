@@ -22,7 +22,7 @@ Supports both **Global (`use.hipcall.com`)** and **Türkiye (`use.hipcall.com.tr
 * **LiveChat Widget:** Enable the Hipcall chat widget across your site by entering your Widget ID (or pasting the widget code) under **Settings > Hipcall**.
 * **Identity Verification (HMAC-SHA256):** When an **Identity verification** secret is configured, logged-in WordPress users are authenticated on the server side using PHP `hash_hmac('sha256', $email, $secret_key)` and identified as **Verified** in the Hipcall inbox.
 * **Marketing Tracker (`h.js`):** When a **Tracker ID** is configured, the plugin adds the asynchronous `h.js` script to the `<head>` of every page to track campaign attribution (UTM parameters, ad clicks) and form submissions.
-* **Session Isolation:** Automatically clears the widget session from both `localStorage` and `sessionStorage` when a logged-in user logs out or when a different user logs in on the same browser.
+* **Session Isolation:** Automatically clears the widget session from `localStorage`, `sessionStorage` and its fallback cookie when a logged-in user logs out or when a different user logs in on the same browser.
 
 == External Services ==
 

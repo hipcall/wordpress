@@ -50,63 +50,45 @@
 		}
 	}
 
+	function removeCookie(name) {
+		try {
+			var expired = '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax';
+			w.document.cookie = encodeURIComponent(name) + expired;
+			w.document.cookie = encodeURIComponent(name) + expired + '; domain=' + w.location.hostname;
+		} catch (e) {
+			// Ignore cookie access errors.
+		}
+	}
+
+	// Remove every copy of the widget session (localStorage, sessionStorage and the fallback cookie)
+	// so the widget starts a fresh session on its own. The widget's internal fields are never read or written.
 	function clearWidgetSession() {
 		removeStoredItem(w.localStorage, sessionKey);
 		removeStoredItem(w.sessionStorage, sessionKey);
 		removeStoredItem(w.localStorage, prechatKey);
 		removeStoredItem(w.sessionStorage, prechatKey);
+		removeCookie(sessionKey);
+		removeCookie(prechatKey);
 	}
 
-	function hasVerifiedSessionInStorage(storage) {
-		var raw = getStoredItem(storage, sessionKey);
-		if (!raw) {
-			return false;
-		}
-		try {
-			var parsed = JSON.parse(raw);
-			return Boolean(parsed && parsed.userHash);
-		} catch (e) {
-			return false;
-		}
-	}
-
-	var prevLocalIdentity = getStoredItem(w.localStorage, identityKey) || '';
-	var prevSessionIdentity = getStoredItem(w.sessionStorage, identityKey) || '';
-	var previousIdentity = prevLocalIdentity || prevSessionIdentity;
+	// "Did the user change?" is answered only from our own key, which stores the last user_hash.
+	var previousIdentity =
+		getStoredItem(w.localStorage, identityKey) || getStoredItem(w.sessionStorage, identityKey) || '';
 
 	if (currentIdentity) {
-		// Logged-in verified user: if a different verified user was previously active,
-		// or if storage had a different userHash, wipe the old widget session completely.
+		// Logged-in verified user: if a different verified user was previously active, wipe the old session.
 		if (previousIdentity && previousIdentity !== currentIdentity) {
 			clearWidgetSession();
-		} else {
-			var storedRaw = getStoredItem(w.localStorage, sessionKey) || getStoredItem(w.sessionStorage, sessionKey);
-			if (storedRaw) {
-				try {
-					var storedSession = JSON.parse(storedRaw);
-					if (storedSession && storedSession.userHash && storedSession.userHash !== currentIdentity) {
-						clearWidgetSession();
-					}
-				} catch (e) {
-					clearWidgetSession();
-				}
-			}
 		}
 
 		setStoredItem(w.localStorage, identityKey, currentIdentity);
 		setStoredItem(w.sessionStorage, identityKey, currentIdentity);
-	} else {
-		// Visitor is logged out: if a verified user was previously active in this tab or browser,
-		// wipe both localStorage and sessionStorage so the previous user's chat history is not exposed.
-		if (
-			previousIdentity ||
-			hasVerifiedSessionInStorage(w.localStorage) ||
-			hasVerifiedSessionInStorage(w.sessionStorage)
-		) {
-			clearWidgetSession();
-			removeStoredItem(w.localStorage, identityKey);
-			removeStoredItem(w.sessionStorage, identityKey);
-		}
+	} else if (previousIdentity) {
+		// Visitor is logged out but a verified user was previously active in this browser or tab:
+		// wipe the session so the previous user's chat history is not exposed.
+		clearWidgetSession();
+		removeStoredItem(w.localStorage, identityKey);
+		removeStoredItem(w.sessionStorage, identityKey);
 	}
 
 	// Initialize the Hipcall command queue before the async widget script loads.

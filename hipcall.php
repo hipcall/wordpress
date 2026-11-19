@@ -29,6 +29,15 @@ define( 'HIPCALL_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 require_once HIPCALL_PLUGIN_DIR . 'includes/helpers.php';
 require_once HIPCALL_PLUGIN_DIR . 'includes/class-hipcall-frontend.php';
 
+/**
+ * Load bundled translations from the plugin's /languages directory.
+ * Language packs from translate.wordpress.org (wp-content/languages/plugins) still take precedence.
+ */
+function hipcall_load_textdomain() {
+	load_plugin_textdomain( 'hipcall', false, dirname( HIPCALL_PLUGIN_BASENAME ) . '/languages' );
+}
+add_action( 'init', 'hipcall_load_textdomain' );
+
 if ( is_admin() ) {
 	require_once HIPCALL_PLUGIN_DIR . 'includes/class-hipcall-settings.php';
 }
