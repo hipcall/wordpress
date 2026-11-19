@@ -5,7 +5,6 @@
  * Description:       Integrate the Hipcall LiveChat (Webchat) widget and Marketing Tracker (h.js) into WordPress with HMAC-SHA256 user verification.
  * Version:           1.0.0
  * Requires at least: 5.0
- * Tested up to:      7.1
  * Requires PHP:      7.2
  * Author:            Hipcall
  * Author URI:        https://www.hipcall.com/
