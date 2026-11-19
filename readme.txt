@@ -1,5 +1,6 @@
 === Hipcall ===
 Contributors: hipcall
+Donate link: https://www.hipcall.com.tr/
 Tags: hipcall, livechat, customer-support, marketing, chat
 Requires at least: 5.0
 Tested up to: 7.1
@@ -57,7 +58,17 @@ Bu eklenti, canlı destek widget'ını ve pazarlama izleyicisini sitenizde çal�
 
 Hayır, her iki bileşen de bağımsız olarak veya birlikte kullanılabilir. Yalnızca `Widget ID` girerek canlı desteği, yalnızca `Tracker ID` girerek pazarlama izleyicisini (`h.js`) veya tümünü birden aktif edebilirsiniz.
 
+== Screenshots ==
+
+1. Hipcall WordPress yönetim paneli ayarlar sayfası (Ayarlar > Hipcall).
+2. Web sitesi ön yüzünde Hipcall Canlı Destek (Webchat) görünümü.
+
 == Changelog ==
 
 = 1.0.0 =
 * İlk sürüm: Hipcall Webchat widget entegrasyonu, HMAC-SHA256 tabanlı kullanıcı kimlik doğrulaması (Verified User) ve Pazarlama İzleyicisi (`h.js`) desteği.
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+Hipcall resmi WordPress eklentisinin ilk kararlı sürümü.
