@@ -1,4 +1,4 @@
-name: CI (PHP Lint & WPCS)
+name: CI (PHP Lint, WPCS & Plugin Check)
 
 on:
   pull_request:
@@ -37,3 +37,20 @@ jobs:
       - name: Run PHPCS
         run: |
           $(composer global config bin-dir --absolute)/phpcs --standard=phpcs.xml.dist
+
+  plugin-check:
+    name: WordPress.org Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build distributable plugin (respecting .distignore)
+        run: |
+          mkdir -p build/hipcall
+          rsync -a --exclude-from=.distignore --exclude=build ./ build/hipcall/
+
+      - name: Run Plugin Check
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: './build/hipcall'
