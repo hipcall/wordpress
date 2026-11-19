@@ -24,10 +24,6 @@ Supports both **Global (`use.hipcall.com`)** and **Türkiye (`use.hipcall.com.tr
 * **Marketing Tracker (`h.js`):** When a **Tracker ID** is configured, the plugin adds the asynchronous `h.js` script to the `<head>` of every page to track campaign attribution (UTM parameters, ad clicks) and form submissions.
 * **Session Isolation:** Automatically clears the widget session from both `localStorage` and `sessionStorage` when a logged-in user logs out or when a different user logs in on the same browser.
 
-= Türkçe Özet (Turkish Summary) =
-
-**Hipcall** resmi WordPress eklentisi, [Hipcall Türkiye](https://www.hipcall.com.tr/) (`use.hipcall.com.tr`) ve Global (`use.hipcall.com`) hesaplarınız için Canlı Destek (Webchat) bileşenini ve Pazarlama İzleyicisini (`h.js`) hiçbir tema dosyasına dokunmadan WordPress sitenize eklemenizi sağlar. Giriş yapmış WordPress üyelerini sunucu tarafında **HMAC-SHA256** (`user_hash`) ile otomatik olarak doğrular (**Kimlik doğrulama**).
-
 == External Services ==
 
 This plugin connects to Hipcall cloud services to provide the live chat widget and marketing tracker on your website:
