@@ -17,6 +17,27 @@
 - **İzleyiciyi Kur (`h.js`):** **Ayarlar › Pazarlama › İzleme › İzleyiciyi kur** bölümündeki **İzleyici Kimliği** (veya `<script>` etiketi) girildiğinde her sayfanın `<head>` bölümüne eşzamansız `h.js` izleyicisini ekler.
 - **Oturum İzolasyonu:** Kullanıcı WordPress'ten çıkış yaptığında veya aynı tarayıcıda farklı bir hesaba geçtiğinde `hipcall_session_<widget_id>` oturumu hem `localStorage` hem `sessionStorage` üzerinden tamamen temizlenir.
 
+## Testleri Çalıştırma
+
+Eklentide PHP testleri (PHPUnit ve WordPress test kütüphanesi) ve JavaScript testleri (Jest) var. İkisi de her pull request'te GitHub Actions'ta otomatik çalışır.
+
+**PHP (PHP 7.4+, Composer ve MySQL/MariaDB gerekir):**
+
+```bash
+composer update
+bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest   # veya 6.3 gibi bir sürüm
+vendor/bin/phpunit
+```
+
+Test veritabanı her çalıştırmada boşaltılır, gerçek bir sitenin veritabanını kullanmayın.
+
+**JavaScript (Node.js 20+ gerekir):**
+
+```bash
+npm ci
+npm test
+```
+
 ## Önbellek (Cache) Notu
 
 Kimlik doğrulama aktifken giriş yapmış kullanıcının adı, e-postası ve `user_hash` bilgisi sayfa HTML'ine yazılır. Önbellek (cache) eklentinizde **giriş yapmış kullanıcılar için sayfa önbelleklemenin kapalı olduğundan** emin olun.

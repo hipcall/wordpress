@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="tests/phpunit/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	convertDeprecationsToExceptions="true"
+	failOnWarning="true"
+	>
+	<testsuites>
+		<testsuite name="hipcall">
+			<directory suffix=".php">./tests/phpunit/tests/</directory>
+		</testsuite>
+	</testsuites>
+	<coverage includeUncoveredFiles="true">
+		<include>
+			<file>./hipcall.php</file>
+			<file>./uninstall.php</file>
+			<directory suffix=".php">./includes/</directory>
+		</include>
+	</coverage>
+</phpunit>

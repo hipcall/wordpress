@@ -35,6 +35,35 @@ hipcall/
     └── hipcall-tr_TR.mo               # Compiled Turkish translation binary
 ```
 
+## Running Tests
+
+The plugin has PHP tests (PHPUnit with the WordPress test library) and JavaScript tests (Jest). Both run automatically in GitHub Actions on every pull request.
+
+**PHP (needs PHP 7.4+, Composer, and a MySQL/MariaDB server):**
+
+```bash
+composer update
+bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest   # or a version such as 6.3
+vendor/bin/phpunit
+```
+
+`bin/install-wp-tests.sh` downloads WordPress core and the WordPress test library from GitHub into the system temp directory (override with `WP_CORE_DIR` / `WP_TESTS_DIR`). The test database is emptied on every run, so never point it at a real site's database.
+
+**JavaScript (needs Node.js 20+):**
+
+```bash
+npm ci
+npm test
+```
+
+| Suite | Covers |
+| --- | --- |
+| `tests/phpunit/tests/helpers/` | UUID extraction/validation, region default and base URL |
+| `tests/phpunit/tests/settings/` | Sanitize callbacks (pasted snippets, invalid IDs, secret keep/clear, region not overwritten) and the settings page (secret never printed) |
+| `tests/phpunit/tests/frontend/` | Script enqueuing per region, HMAC-SHA256 `user_hash`, no identity for logged-out users, inline config escaping, tracker `data-hipcall-id` |
+| `tests/phpunit/tests/uninstall.php` | Options removed on uninstall |
+| `tests/js/` | Session isolation on logout and account switch, `hc` command queue, browsers that block storage |
+
 ## Caching Note
 
 When Identity verification is enabled, logged-in user details (`name`, `email`, `user_hash`) are embedded in the page HTML. Ensure full-page caching is **disabled for logged-in users** in your caching plugin or CDN.

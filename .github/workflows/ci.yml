@@ -1,4 +1,4 @@
-name: CI (PHP Lint, WPCS & Plugin Check)
+name: CI (Lint, Plugin Check & Tests)
 
 on:
   pull_request:
@@ -54,3 +54,71 @@ jobs:
         uses: wordpress/plugin-check-action@v1
         with:
           build-dir: './build/hipcall'
+
+  phpunit:
+    name: PHPUnit (PHP ${{ matrix.php }}, WP ${{ matrix.wp }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Oldest supported combination (Requires at least / Requires PHP).
+          - php: '7.4'
+            wp: '6.3'
+          # Latest WordPress release on the newest PHP.
+          - php: '8.3'
+            wp: 'latest'
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli
+          tools: composer
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Install WordPress ${{ matrix.wp }} and the test library
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306 ${{ matrix.wp }} true
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
+
+  jest:
+    name: JavaScript tests (Jest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run Jest
+        run: npm test

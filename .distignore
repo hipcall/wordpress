@@ -10,3 +10,13 @@ phpcs.xml.dist
 *.zip
 build
 Claude outputs
+bin
+tests
+vendor
+node_modules
+composer.json
+composer.lock
+package.json
+package-lock.json
+phpunit.xml.dist
+.phpunit.result.cache
