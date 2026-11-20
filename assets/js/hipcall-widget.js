@@ -22,6 +22,19 @@
 	var currentUser = config.user && config.user.user_hash ? config.user : null;
 	var currentIdentity = currentUser ? String(currentUser.user_hash) : '';
 
+	// Reading window.localStorage / window.sessionStorage itself throws when the browser blocks storage
+	// (e.g. Safari with all cookies blocked), so every access goes through this guard.
+	function getStorage(name) {
+		try {
+			return w[name] || null;
+		} catch (e) {
+			return null;
+		}
+	}
+
+	var local = getStorage('localStorage');
+	var session = getStorage('sessionStorage');
+
 	function getStoredItem(storage, key) {
 		try {
 			return storage ? storage.getItem(key) : null;
@@ -63,17 +76,17 @@
 	// Remove every copy of the widget session (localStorage, sessionStorage and the fallback cookie)
 	// so the widget starts a fresh session on its own. The widget's internal fields are never read or written.
 	function clearWidgetSession() {
-		removeStoredItem(w.localStorage, sessionKey);
-		removeStoredItem(w.sessionStorage, sessionKey);
-		removeStoredItem(w.localStorage, prechatKey);
-		removeStoredItem(w.sessionStorage, prechatKey);
+		removeStoredItem(local, sessionKey);
+		removeStoredItem(session, sessionKey);
+		removeStoredItem(local, prechatKey);
+		removeStoredItem(session, prechatKey);
 		removeCookie(sessionKey);
 		removeCookie(prechatKey);
 	}
 
 	// "Did the user change?" is answered only from our own key, which stores the last user_hash.
 	var previousIdentity =
-		getStoredItem(w.localStorage, identityKey) || getStoredItem(w.sessionStorage, identityKey) || '';
+		getStoredItem(local, identityKey) || getStoredItem(session, identityKey) || '';
 
 	if (currentIdentity) {
 		// Logged-in verified user: if a different verified user was previously active, wipe the old session.
@@ -81,14 +94,14 @@
 			clearWidgetSession();
 		}
 
-		setStoredItem(w.localStorage, identityKey, currentIdentity);
-		setStoredItem(w.sessionStorage, identityKey, currentIdentity);
+		setStoredItem(local, identityKey, currentIdentity);
+		setStoredItem(session, identityKey, currentIdentity);
 	} else if (previousIdentity) {
 		// Visitor is logged out but a verified user was previously active in this browser or tab:
 		// wipe the session so the previous user's chat history is not exposed.
 		clearWidgetSession();
-		removeStoredItem(w.localStorage, identityKey);
-		removeStoredItem(w.sessionStorage, identityKey);
+		removeStoredItem(local, identityKey);
+		removeStoredItem(session, identityKey);
 	}
 
 	// Initialize the Hipcall command queue before the async widget script loads.
