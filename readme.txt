@@ -69,6 +69,12 @@ When **Identity verification** is enabled and a user is logged into WordPress, t
 
 This plugin is designed for standard single-site WordPress installations (or per-site activation). Network-wide Multisite uninstallation cleanup is not currently supported.
 
+== Screenshots ==
+
+1. Settings > Hipcall: choose your region and paste your widget code, identity verification secret and tracker ID.
+2. The Hipcall live chat widget on a WordPress site, with a logged-in user's conversation.
+3. Logged-in WordPress users appear as Verified in the Hipcall inbox.
+
 == Changelog ==
 
 = 1.0.0 =
