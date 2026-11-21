@@ -3,10 +3,10 @@ Contributors: hipcall
 Tags: hipcall, livechat, customer-support, marketing, chat
 Requires at least: 6.3
 Tested up to: 7.1
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 7.4
-License: MIT
-License URI: https://opensource.org/licenses/MIT
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Embed the Hipcall LiveChat widget and Marketing Tracker (h.js) on WordPress with automatic HMAC-SHA256 user verification.
 
@@ -77,10 +77,19 @@ This plugin is designed for standard single-site WordPress installations (or per
 
 == Changelog ==
 
+= 1.1.0 =
+* License changed to GPLv2 or later, the same license as WordPress.
+* Fix: Logged-in users are now identified in the chat widget even when the browser blocks storage access (for example Safari with all cookies blocked).
+* Improvement: Session isolation also clears the widget's fallback session cookie when a user logs out or another user logs in.
+* Added a translation template (languages/hipcall.pot) and screenshots for the plugin directory.
+
 = 1.0.0 =
 * Initial release: Hipcall Webchat widget integration, HMAC-SHA256 logged-in user identity verification, Marketing Tracker (`h.js`) support, and Global / Türkiye region selection.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Relicensed under GPLv2 or later. Fixes logged-in user identification in browsers that block storage.
 
 = 1.0.0 =
 Initial stable release of the official Hipcall WordPress plugin.
