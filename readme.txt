@@ -81,6 +81,7 @@ This plugin is designed for standard single-site WordPress installations (or per
 * License changed to GPLv2 or later, the same license as WordPress.
 * Fix: Logged-in users are now identified in the chat widget even when the browser blocks storage access (for example Safari with all cookies blocked).
 * Improvement: Session isolation also clears the widget's fallback session cookie when a user logs out or another user logs in.
+* Improvement: The settings page no longer shows a tracker script example that did not follow the selected region.
 * Added a translation template (languages/hipcall.pot) and screenshots for the plugin directory.
 
 = 1.0.0 =
