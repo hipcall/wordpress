@@ -44,4 +44,4 @@ Kimlik doğrulama aktifken giriş yapmış kullanıcının adı, e-postası ve `
 
 ## Lisans
 
-MIT Lisansı ile lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına göz atabilirsiniz.
+WordPress ile aynı lisans olan GPLv2 or later ile lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına göz atabilirsiniz.

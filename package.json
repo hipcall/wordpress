@@ -2,7 +2,7 @@
 	"name": "hipcall-wordpress",
 	"private": true,
 	"description": "Development tooling for the Hipcall WordPress plugin (not shipped with the plugin).",
-	"license": "MIT",
+	"license": "GPL-2.0-or-later",
 	"scripts": {
 		"test": "jest"
 	},

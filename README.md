@@ -70,4 +70,4 @@ When Identity verification is enabled, logged-in user details (`name`, `email`, 
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+GPLv2 or later, the same license as WordPress. See [LICENSE](LICENSE) for details.

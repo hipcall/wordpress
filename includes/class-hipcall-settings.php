@@ -296,8 +296,7 @@ function hipcall_settings_page_html() {
 								placeholder="<?php echo esc_attr__( 'e.g. e61f8fe3-3eea-44d0-bd1f-416c143c710c', 'hipcall' ); ?>"
 							/>
 							<p class="description">
-								<?php esc_html_e( 'Optional: Paste the Tracker ID or script tag from Settings › Marketing › Tracking to add h.js to the <head> of every page.', 'hipcall' ); ?><br />
-								<code>&lt;script async src="<?php echo esc_html( $base_url ); ?>/track/v1/h.js" data-hipcall-id="<strong>TRACKER_ID</strong>"&gt;&lt;/script&gt;</code>
+								<?php esc_html_e( 'Optional: Paste the Tracker ID or script tag from Settings › Marketing › Tracking to add h.js to the <head> of every page.', 'hipcall' ); ?>
 							</p>
 						</td>
 					</tr>

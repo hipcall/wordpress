@@ -45,6 +45,20 @@ class Tests_Settings_SettingsPage extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The tracker <script> example did not follow the region selected in the form, so it was removed.
+	 *
+	 * @covers ::hipcall_settings_page_html
+	 */
+	public function test_settings_page_should_not_show_a_region_specific_tracker_snippet() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$html = get_echo( 'hipcall_settings_page_html' );
+
+		$this->assertStringContainsString( 'name="hipcall_tracker_id"', $html, 'The Tracker ID field should be rendered.' );
+		$this->assertStringNotContainsString( '/track/v1/h.js', $html, 'No hard-coded tracker URL should be shown.' );
+	}
+
+	/**
 	 * @covers ::hipcall_settings_page_html
 	 */
 	public function test_settings_page_should_render_nothing_for_users_without_manage_options() {

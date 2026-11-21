@@ -1,8 +1,8 @@
 # Copyright (C) 2026 Hipcall
-# This file is distributed under the MIT license.
+# This file is distributed under the GPLv2 or later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: Hipcall 1.0.0\n"
+"Project-Id-Version: Hipcall 1.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/hipcall/wordpress/issues\n"
 "POT-Creation-Date: 2026-11-19 16:00+0000\n"
 "MIME-Version: 1.0\n"
