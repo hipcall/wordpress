@@ -84,3 +84,6 @@ msgstr ""
 
 msgid "Invalid Tracker ID. Please enter a valid UUID or paste the script tag from Settings › Marketing › Tracking."
 msgstr ""
+
+msgid "Invalid identity verification secret. Please copy it again from Settings › Inboxes › (inbox) › Widget settings › Identity verification."
+msgstr ""

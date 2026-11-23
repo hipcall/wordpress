@@ -86,3 +86,6 @@ msgstr "Geçersiz Widget ID. Lütfen geçerli bir UUID girin veya Ayarlar › Ge
 
 msgid "Invalid Tracker ID. Please enter a valid UUID or paste the script tag from Settings › Marketing › Tracking."
 msgstr "Geçersiz İzleyici Kimliği. Lütfen geçerli bir UUID girin veya Ayarlar › Pazarlama › İzleme bölümündeki script etiketini yapıştırın."
+
+msgid "Invalid identity verification secret. Please copy it again from Settings › Inboxes › (inbox) › Widget settings › Identity verification."
+msgstr "Geçersiz kimlik doğrulama gizli anahtarı. Lütfen anahtarı Ayarlar › Gelen kutuları › (kutu) › Widget ayarları › Kimlik doğrulama bölümünden yeniden kopyalayın."
