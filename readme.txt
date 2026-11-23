@@ -28,7 +28,7 @@ Supports both **Global (`use.hipcall.com`)** and **Türkiye (`use.hipcall.com.tr
 
 This plugin connects to Hipcall cloud services to provide the live chat widget and marketing tracker on your website:
 
-* **Service Provider:** [Hipcall Global](https://www.hipcall.com/) / [Hipcall Türkiye](https://www.hipcall.com.tr/)
+* **Service Provider:** [Hipcall](https://www.hipcall.com/)
 * **Endpoints Used (depending on the selected Region):**
   * Global: `https://use.hipcall.com/widget/{WIDGET_ID}`, `wss://use.hipcall.com/socket`, `https://use.hipcall.com/track/v1/h.js`
   * Türkiye: `https://use.hipcall.com.tr/widget/{WIDGET_ID}`, `wss://use.hipcall.com.tr/socket`, `https://use.hipcall.com.tr/track/v1/h.js`
@@ -40,8 +40,8 @@ This plugin connects to Hipcall cloud services to provide the live chat widget a
   * `hipcall_session_{WIDGET_ID}` (`localStorage`, `sessionStorage`, and fallback 30-day cookie): Stores the active chat session token and visitor state.
   * `hipcall_wp_identity_{WIDGET_ID}` (`localStorage` and `sessionStorage`): Stores only the HMAC-SHA256 `user_hash` of the currently logged-in WordPress user so the chat session can be cleared automatically on logout or account switch.
 * **Terms of Use & Privacy Policy:**
-  * Global: [Hipcall Website](https://www.hipcall.com/) | [Privacy Policy](https://www.hipcall.com/privacy-policy/) | [Terms of Service](https://www.hipcall.com/terms-of-service/)
-  * Türkiye: [Hipcall Türkiye](https://www.hipcall.com.tr/) | [Privacy Policy](https://www.hipcall.com.tr/gizlilik-politikasi/) | [Terms of Service](https://www.hipcall.com.tr/kullanim-kosullari/)
+  * [Privacy Policy](https://www.hipcall.com/legal/privacy-policy/) | [Terms of Service](https://www.hipcall.com/legal/term-of-service/)
+  * In Turkish: [Privacy Policy](https://www.hipcall.com/tr/legal/privacy-policy/) | [Terms of Service](https://www.hipcall.com/tr/legal/term-of-service/)
 
 == Installation ==
 
@@ -83,6 +83,8 @@ This plugin is designed for standard single-site WordPress installations (or per
 * Improvement: Session isolation also clears the widget's fallback session cookie when a user logs out or another user logs in.
 * Improvement: The settings page no longer shows a tracker script example that did not follow the selected region.
 * Added a translation template (languages/hipcall.pot) and screenshots for the plugin directory.
+* The identity verification secret is now stored exactly as entered. Invalid input is rejected with an error instead of being changed.
+* Translation files are no longer bundled with the plugin. Translations are delivered through translate.wordpress.org.
 
 = 1.0.0 =
 * Initial release: Hipcall Webchat widget integration, HMAC-SHA256 logged-in user identity verification, Marketing Tracker (`h.js`) support, and Global / Türkiye region selection.

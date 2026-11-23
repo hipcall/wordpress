@@ -31,8 +31,8 @@ hipcall/
 ├── assets/
 │   └── js/hipcall-widget.js           # Session isolation and hc('user', ...) queue init
 └── languages/
-    ├── hipcall-tr_TR.po               # Turkish translation source
-    └── hipcall-tr_TR.mo               # Compiled Turkish translation binary
+    ├── hipcall.pot                    # Translation template (shipped with the plugin)
+    └── hipcall-tr_TR.po               # Turkish translation source for translate.wordpress.org (not shipped)
 ```
 
 ## Running Tests

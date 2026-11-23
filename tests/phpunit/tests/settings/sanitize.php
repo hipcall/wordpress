@@ -161,6 +161,57 @@ class Tests_Settings_Sanitize extends WP_UnitTestCase {
 		$this->assertSame( '', hipcall_sanitize_secret_key( 'whsec_ignored' ) );
 	}
 
+	/**
+	 * The secret is an HMAC key and must be stored exactly as issued; sanitize_text_field() would strip
+	 * percent-encoded octets such as "%41".
+	 *
+	 * @covers ::hipcall_sanitize_secret_key
+	 */
+	public function test_sanitize_secret_should_store_the_secret_unchanged() {
+		$secret = 'whsec_Ab%41+/=_-.~<x>';
+
+		$this->assertSame( $secret, hipcall_sanitize_secret_key( $secret ) );
+		$this->assertEmpty( $this->get_settings_error_codes(), 'A valid secret should not add a settings error.' );
+	}
+
+	/**
+	 * @dataProvider data_invalid_secrets
+	 *
+	 * @covers ::hipcall_sanitize_secret_key
+	 *
+	 * @param mixed $value Submitted value.
+	 */
+	public function test_sanitize_secret_should_reject_invalid_input_and_keep_the_saved_secret( $value ) {
+		update_option( 'hipcall_secret_key', 'whsec_existing' );
+
+		$this->assertSame( 'whsec_existing', hipcall_sanitize_secret_key( $value ), 'Saved secret should be kept.' );
+		$this->assertContains( 'hipcall_invalid_secret_key', $this->get_settings_error_codes(), 'An error should be shown.' );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public function data_invalid_secrets() {
+		return array(
+			'inner whitespace'    => array( 'whsec_abc def' ),
+			'line break'          => array( "whsec_abc\ndef" ),
+			'non-ascii character' => array( 'whsec_abcç' ),
+			'too long'            => array( 'whsec_' . str_repeat( 'a', 251 ) ),
+		);
+	}
+
+	/**
+	 * @covers ::hipcall_sanitize_secret_key
+	 */
+	public function test_sanitize_secret_should_ignore_unexpected_clear_checkbox_values() {
+		update_option( 'hipcall_secret_key', 'whsec_existing' );
+		$_POST['hipcall_clear_secret'] = 'yes';
+
+		$this->assertSame( 'whsec_new', hipcall_sanitize_secret_key( 'whsec_new' ) );
+	}
+
 	/*
 	 * Registration (end-to-end through update_option()).
 	 */

@@ -21,3 +21,5 @@ package-lock.json
 phpunit.xml.dist
 .phpunit.result.cache
 .wordpress-org
+languages/*.po
+languages/*.mo

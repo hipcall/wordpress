@@ -52,24 +52,43 @@ function hipcall_sanitize_widget_id( $value ) {
 
 /**
  * Sanitize Identity Verification secret.
- * Since the secret is never echoed back into the page HTML, an empty submission preserves
- * the existing secret unless the administrator explicitly checks the clear checkbox.
  *
- * @param mixed $value Raw secret input.
- * @return string Sanitized secret.
+ * The secret is used only as the HMAC-SHA256 key on the server, so it must be stored exactly as issued
+ * by Hipcall: sanitize_text_field() could alter it (for example by removing percent-encoded octets).
+ * Instead, the value is validated against a strict allow-list of printable ASCII characters without
+ * whitespace. Invalid input is rejected with a settings error and the previously saved secret is kept.
+ *
+ * Since the secret is never echoed back into the page HTML, an empty submission preserves the existing
+ * secret unless the administrator explicitly checks the clear checkbox.
+ *
+ * @param mixed $value Raw secret input (already unslashed by options.php).
+ * @return string Validated secret.
  */
 function hipcall_sanitize_secret_key( $value ) {
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Verified by WordPress core options.php before sanitize_callback runs.
-	if ( ! empty( $_POST['hipcall_clear_secret'] ) ) {
+	$clear = isset( $_POST['hipcall_clear_secret'] ) ? sanitize_key( wp_unslash( $_POST['hipcall_clear_secret'] ) ) : '';
+	if ( '1' === $clear ) {
 		return '';
 	}
 
-	$clean = sanitize_text_field( trim( (string) $value ) );
-	if ( '' === $clean ) {
-		return (string) get_option( 'hipcall_secret_key', '' );
+	$previous = (string) get_option( 'hipcall_secret_key', '' );
+	$secret   = is_scalar( $value ) ? trim( (string) $value ) : '';
+
+	if ( '' === $secret ) {
+		return $previous;
 	}
 
-	return $clean;
+	if ( ! hipcall_is_valid_secret( $secret ) ) {
+		add_settings_error(
+			'general',
+			'hipcall_invalid_secret_key',
+			esc_html__( 'Invalid identity verification secret. Please copy it again from Settings › Inboxes › (inbox) › Widget settings › Identity verification.', 'hipcall' ),
+			'error'
+		);
+		return $previous;
+	}
+
+	return $secret;
 }
 
 /**
