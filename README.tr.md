@@ -42,6 +42,10 @@ npm test
 
 Kimlik doğrulama aktifken giriş yapmış kullanıcının adı, e-postası ve `user_hash` bilgisi sayfa HTML'ine yazılır. Önbellek (cache) eklentinizde **giriş yapmış kullanıcılar için sayfa önbelleklemenin kapalı olduğundan** emin olun.
 
+## Geliştirme ve Sürüm Yayınlama
+
+Değişikliklerin WordPress.org'a nasıl ulaştığı ve yeni sürümün nasıl yayınlanacağı (`bin/release.sh`) için [DEVELOPMENT.md](DEVELOPMENT.md) dosyasına bakın.
+
 ## Lisans
 
 WordPress ile aynı lisans olan GPLv2 or later ile lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına göz atabilirsiniz.

@@ -2,6 +2,7 @@ name: Deploy to WordPress.org
 
 # Publishing a GitHub Release with a tag like "1.0.1" pushes that version to the
 # WordPress.org SVN repository and attaches the installable hipcall.zip to the release.
+# Do not create releases by hand: run bin/release.sh (see DEVELOPMENT.md).
 #
 # Required repository secrets (Settings > Secrets and variables > Actions):
 #   SVN_USERNAME - WordPress.org username with commit access to the "hipcall" plugin
@@ -13,6 +14,11 @@ on:
 
 permissions:
   contents: write
+
+# Shared with wporg-assets.yml so two SVN commits never run at the same time.
+concurrency:
+  group: wporg-svn
+  cancel-in-progress: false
 
 jobs:
   deploy:

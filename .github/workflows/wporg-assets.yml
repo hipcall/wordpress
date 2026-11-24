@@ -1,0 +1,59 @@
+name: Update WordPress.org readme & assets
+
+# Pushes readme.txt and the .wordpress-org/ images (banners, icons, screenshots)
+# to WordPress.org without releasing a new plugin version. Use it for things like
+# "Tested up to" bumps, FAQ/description edits or new screenshots.
+#
+# Whatever readme.txt says on main goes live on wordpress.org/plugins/hipcall as soon
+# as this runs: it updates trunk/readme.txt AND tags/<Stable tag>/readme.txt.
+# So never put changelog entries for unreleased versions in readme.txt; bin/release.sh
+# writes them at release time.
+#
+# Release commits ("chore(release): X.Y.Z") are skipped, deploy.yml handles those.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - readme.txt
+      - .wordpress-org/**
+  workflow_dispatch:
+
+# Shared with deploy.yml so two SVN commits never run at the same time.
+concurrency:
+  group: wporg-svn
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Push readme.txt and assets to WordPress.org SVN
+    if: "!startsWith(github.event.head_commit.message, 'chore(release):')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check that the Stable tag has been released
+        id: guard
+        run: |
+          STABLE=$(sed -nE 's/^Stable tag:[[:space:]]*([0-9][0-9.]*).*/\1/p' readme.txt | head -1)
+          echo "Stable tag in readme.txt: $STABLE"
+          if git rev-parse -q --verify "refs/tags/$STABLE" >/dev/null; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Stable tag $STABLE has not been released yet, skipping. Run bin/release.sh to release it."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: WordPress.org readme & assets update
+        if: steps.guard.outputs.ok == 'true'
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: hipcall
+          # main may contain code that is not released yet; only copy readme.txt + assets.
+          IGNORE_OTHER_FILES: true
