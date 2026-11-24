@@ -23,3 +23,6 @@ phpunit.xml.dist
 .wordpress-org
 languages/*.po
 languages/*.mo
+DEVELOPMENT.md
+CLAUDE.md
+.claude

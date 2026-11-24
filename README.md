@@ -68,6 +68,10 @@ npm test
 
 When Identity verification is enabled, logged-in user details (`name`, `email`, `user_hash`) are embedded in the page HTML. Ensure full-page caching is **disabled for logged-in users** in your caching plugin or CDN.
 
+## Development & Releases
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for how changes reach WordPress.org and how to release a new version (`bin/release.sh`).
+
 ## License
 
 GPLv2 or later, the same license as WordPress. See [LICENSE](LICENSE) for details.
