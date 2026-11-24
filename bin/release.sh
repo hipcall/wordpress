@@ -15,7 +15,8 @@
 #
 # Options:
 #   --notes-file FILE   Changelog lines for readme.txt (one "* ..." item per line).
-#                       Without it the script opens $EDITOR with a draft built from commits.
+#                       Without it the script opens $EDITOR (default: nano) with a draft
+#                       built from commits.
 #   --yes, -y           Do not ask for confirmation (needs a version and, unless the
 #                       changelog entry already exists, --notes-file).
 #   --dry-run           Make the changes, show the diff, then revert. Nothing is committed.
@@ -41,7 +42,7 @@ ok()   { printf '%s%s%s\n' "$GREEN" "$*" "$NC"; }
 warn() { printf '%s%s%s\n' "$YELLOW" "$*" "$NC"; }
 die()  { printf '%sError: %s%s\n' "$RED" "$*" "$NC" >&2; exit 1; }
 
-usage() { sed -n '3,24p' "$0" | sed 's/^# \{0,1\}//'; }
+usage() { awk 'NR > 2 && !/^#/ { exit } NR > 2 { sub(/^# ?/, ""); print }' "$0"; }
 
 # ---------------------------------------------------------------------------
 # Arguments
@@ -262,10 +263,14 @@ else
 			echo "#"
 			git log --no-merges --pretty='* %s' $RANGE | grep -v '^\* chore(release)' || true
 		} >"$RAW_NOTES"
-		EDITOR_CMD="${VISUAL:-${EDITOR:-vi}}"
+		DEFAULT_EDITOR="vi"
+		command -v nano >/dev/null 2>&1 && DEFAULT_EDITOR="nano"
+		EDITOR_CMD="${VISUAL:-${EDITOR:-$DEFAULT_EDITOR}}"
 		info "Opening the changelog draft in: $EDITOR_CMD"
 		# Intentionally unquoted so values like "code --wait" work.
-		$EDITOR_CMD "$RAW_NOTES"
+		if ! $EDITOR_CMD "$RAW_NOTES"; then
+			die "The editor '$EDITOR_CMD' failed. Use another one, e.g. EDITOR=nano bin/release.sh (or EDITOR=\"code --wait\"), or write the notes to a file and pass --notes-file FILE."
+		fi
 	fi
 
 	ENTRY="$TMP_DIR/entry"

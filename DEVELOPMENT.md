@@ -54,7 +54,7 @@ The script:
 
 1. Fetches `origin`, makes sure your `main` is up to date, and checks that the four version numbers agree.
 2. Asks for the new version: patch (bug fixes), minor (new features) or major (breaking changes). `current` releases the version already in the files without a bump (only offered when it has not been released yet, e.g. the first release or a retry).
-3. Opens your `$EDITOR` with a changelog draft built from the commit messages. Rewrite it for site owners: it is shown publicly on the plugin page. If `readme.txt` already has a `= X.Y.Z =` entry, that entry is used instead.
+3. Opens your `$EDITOR` (`nano` if it is not set; use e.g. `EDITOR="code --wait" bin/release.sh` for VS Code) with a changelog draft built from the commit messages. Rewrite it for site owners: it is shown publicly on the plugin page. If `readme.txt` already has a `= X.Y.Z =` entry, that entry is used instead.
 4. Updates the four version numbers, adds the changelog entry to `readme.txt`, and shows the diff.
 5. After you confirm: commits `chore(release): X.Y.Z`, pushes `main`, and publishes the GitHub Release `X.Y.Z`. That triggers `deploy.yml`.
 6. Offers to follow the deploy run in the terminal.
